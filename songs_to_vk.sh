@@ -2,7 +2,7 @@
 #
 #  Songs to VK.com
 #  Устанавливает проигрываемую в Audacious песню как статус в профиле VK
-#  Version 0.2
+#  Version 0.3
 #  
 #  Copyright 2014 Konstantin Zyryanov <post.herzog@gmail.com>
 #  
@@ -62,6 +62,7 @@ if [ $options != 0 ]; then
 		if [ $second_launch = 1 ]; then
 			pid_no=`pgrep -fo songs_to_vk`;
 			kill $pid_no;
+			sleep 1;
 		fi;
 #Проверка на наличие пользовательского текста
 		shift;
@@ -154,6 +155,7 @@ if [ $options != 0 ]; then
 #Получение PID ранее запущенного скрипта и его завершение
 			pid_no=`pgrep -fo songs_to_vk`;
 			kill $pid_no;
+			sleep 1;
 #Если скрипт ещё не был запущен
 		else
 			echo "Внимание! Скрипт ещё не был запущен!";
@@ -204,6 +206,8 @@ play_status=`audtool --playback-status`;
 song="`audtool --current-song`";
 #Основной цикл
 while [ "$response" = '{"response":1}' ]; do
+#Удаление амперсандов из названия песни
+	song=`echo $song| sed 's/&/and/g'`;
 #Проверка статуса плеера и, в случае тишины, установка соответствующего статуса в профиле VK
 	if [ $play_status != "playing" ]; then
 		user_status="$silence_status";
@@ -229,7 +233,14 @@ while [ "$response" = '{"response":1}' ]; do
 		play_status=`audtool --playback-status`;
 	done;
 done;
-#Если от сервера поступит не обычный ответ - прекрещание работы
+#Если от сервера поступит не обычный ответ - прекращение работы
 #и вывод ошибки с данным ответом
 echo "Error:";
 echo "$response";
+#Если от сервера поступит не обычный ответ - прекращение работы
+#и вывод ошибки с данным ответом в лог-файл
+date >> songs_to_vk.log;
+echo "Error:" >> songs_to_vk.log;
+echo "$response" >> songs_to_vk.log;
+echo "" >> songs_to_vk.log;
+exit;
