@@ -2,7 +2,7 @@
 #
 #  Songs to VK.com
 #  Устанавливает проигрываемую в Audacious песню как статус в профиле VK
-#  Version 0.3
+#  Version 0.3.1
 #  
 #  Copyright 2014 Konstantin Zyryanov <post.herzog@gmail.com>
 #  
@@ -197,7 +197,7 @@ fi;
 response='{"response":1}';
 #Установка сообщения, отсылаемого в качестве статуса, в случае остановки/паузы плеера
 #1. Используйте кавычки '' или "" для обрамления сообщений со знаками препинания!
-#Например: "Я AFK", но: 'Я AFK!!!'.
+#Например: "Я AFK", но: "'Я AFK!!!'".
 #2. Ограничение на размер сообщения - 140 символов.
 silence_status="AFK";
 #Получение статуса плеера
@@ -206,14 +206,14 @@ play_status=`audtool --playback-status`;
 song="`audtool --current-song`";
 #Основной цикл
 while [ "$response" = '{"response":1}' ]; do
-#Удаление амперсандов из названия песни
-	song=`echo $song| sed 's/&/and/g'`;
 #Проверка статуса плеера и, в случае тишины, установка соответствующего статуса в профиле VK
 	if [ $play_status != "playing" ]; then
 		user_status="$silence_status";
 	else
 		user_status="$user_text_start_sed $song $user_text_end_sed";
 	fi;
+#Удаление амперсандов из статуса
+	user_status=`echo $user_status| sed 's/&/and/g'`;
 #Удаление пробелов в отсылаемом статусе
 	user_status_sed=`echo $user_status| sed 's/ /%20/g'`;
 #Установка статуса через API VK
