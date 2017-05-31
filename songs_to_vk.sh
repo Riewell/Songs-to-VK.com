@@ -2,7 +2,7 @@
 #
 #  Songs to VK.com
 #  Устанавливает проигрываемую в Audacious песню как статус в профиле VK
-#  Version 0.3.1
+#  Version 0.3.2
 #  
 #  Copyright 2014 Konstantin Zyryanov <post.herzog@gmail.com>
 #  
@@ -164,7 +164,7 @@ if [ $options != 0 ]; then
 		fi;
 #Установка статуса на пользовательский текст (если есть) и выход
 		user_text_sed=`echo $user_text| sed 's/ /%20/g'`;
-		response=`curl -s "https://api.vkontakte.ru/method/status.set?text=$user_text_sed&access_token=$token"`;
+		response=`curl -s "https://api.vk.com/method/status.set?text=$user_text_sed&access_token=$token"`;
 		exit;;
 		
 #Замена статуса на текст ТЕКСТ и выход
@@ -178,7 +178,7 @@ if [ $options != 0 ]; then
 			shift;
 		done;
 		user_text_sed=`echo $user_text| sed 's/ /%20/g'`;
-		response=`curl -s "https://api.vkontakte.ru/method/status.set?text=$user_text_sed&access_token=$token"`;
+		response=`curl -s "https://api.vk.com/method/status.set?text=$user_text_sed&access_token=$token"`;
 	exit;;
 
 #Если в позиционных параметрах что-то другое - вывод краткой справки и выход
@@ -217,7 +217,7 @@ while [ "$response" = '{"response":1}' ]; do
 #Удаление пробелов в отсылаемом статусе
 	user_status_sed=`echo $user_status| sed 's/ /%20/g'`;
 #Установка статуса через API VK
-	response=`curl -s "https://api.vkontakte.ru/method/status.set?text=$user_status_sed&access_token=$token"`;
+	response=`curl -s "https://api.vk.com/method/status.set?text=$user_status_sed&access_token=$token"`;
 #Если плеер не играет - ожидание (проверка статуса плеера - каждые 10 секунд)
 	while [ $play_status != "playing" ]; do
 		sleep 10;
