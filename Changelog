@@ -1,3 +1,9 @@
+Songs to VK (0.3.2)
+
+	* Изменён домен для доступа по API с vkontakte.ru на vk.com
+	
+-Konstantin Zyryanov <post.herzog@gmail.com> Ср. 31 мая 2017 16:15:11 YEKT 
+
 Songs to VK (0.3.1)
 
 	* Добавлена замена амперсанда ('&') в статусе на "and"
